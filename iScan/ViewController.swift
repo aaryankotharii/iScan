@@ -42,16 +42,17 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func outputCheck() {
         
         //MARK: Check output
-        if session.canAddOutput(metadataOutput) {
-               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-               session.addOutput(metadataOutput)
-               metadataOutput.metadataObjectTypes = [.qr]
-           } else {
-              print("failed")
-           }
+//        if session.canAddOutput(metadataOutput) {
+//               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+//               session.addOutput(metadataOutput)
+//               metadataOutput.metadataObjectTypes = [.qr]
+//           } else {
+//              print("failed")
+//           }
     }
     
     func addBlur(){
+        //MARK: Add Blur view
         let blur = UIBlurEffect(style: .regular)
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = self.view.bounds
@@ -61,13 +62,11 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let maskSize = getMaskSize()
         let outerPath = UIBezierPath(roundedRect: maskSize, cornerRadius: 30)
         
-        let superlayerPath = UIBezierPath.init(rect: blurView.frame)
-        outerPath.usesEvenOddFillRule = true
+        //MARK: Add Mask
+        let superlayerPath = UIBezierPath(rect: blurView.frame)
         outerPath.append(superlayerPath)
         scanLayer.path = outerPath.cgPath
         scanLayer.fillRule = .evenOdd
-        scanLayer.fillColor = UIColor.black.cgColor
-        
         
         view.addSubview(blurView)
         blurView.layer.mask = scanLayer

@@ -19,7 +19,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         outputCheck()
         sessionSetup()
         addBlur()
-        
+        print(getMaskSize())
         // Do any additional setup after loading the view.
     }
     
@@ -58,9 +58,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let scanLayer = CAShapeLayer()
-        
-        let outerPath = UIBezierPath(roundedRect: CGRect(x: 57, y: 298, width: 300, height: 300),
-                                     cornerRadius: 30)
+        let maskSize = getMaskSize()
+        let outerPath = UIBezierPath(roundedRect: maskSize, cornerRadius: 30)
         
         let superlayerPath = UIBezierPath.init(rect: blurView.frame)
         outerPath.usesEvenOddFillRule = true
@@ -72,6 +71,15 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         view.addSubview(blurView)
         blurView.layer.mask = scanLayer
+    }
+    
+    private func getMaskSize() -> CGRect {
+        let viewWidth = view.frame.width
+        let rectwidth = viewWidth - 114
+        let halfWidth = rectwidth/2
+        let x = view.center.x - halfWidth
+        let y = view.center.y - halfWidth
+        return CGRect(x: x, y: y, width: rectwidth, height: rectwidth)
     }
     
 }

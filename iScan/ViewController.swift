@@ -9,7 +9,7 @@
 import UIKit
 import AVKit
 
-class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+class ViewController: UIViewController {
     
     let session: AVCaptureSession = AVCaptureSession()
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
@@ -82,4 +82,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
 }
+
+//MARK:- AVCaptureMetadataOutputObjects Delegate Methods
+extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
+
+}
+
 

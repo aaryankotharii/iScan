@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
     var success : Bool = true
     var label : UILabel!
+    var image: UIImageView!
 
     
     //MARK:- VC lifecycle methods
@@ -135,11 +136,37 @@ class ViewController: UIViewController {
         let x = view.center.x - halfWidth
         let y = view.center.y - halfWidth
         let imageFrame = CGRect(x: x, y: y, width: imageWidth, height: imageWidth)
-        let image = UIImageView()
+        image = UIImageView()
         image.frame = imageFrame
         image.image = UIImage(named: "corners")
         print(imageFrame)
         view.addSubview(image)
+        animateCorner()
+        
+    }
+    
+    func animateCorner(){
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.toValue = 1.1
+         animation.duration=2
+         animation.timingFunction=CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeOut)
+         animation.autoreverses=true
+        image.layer.add(animation, forKey:"animate")
+    }
+    
+    func toggleTorch(on: Bool) {
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
+        guard device.hasTorch else { print("Torch isn't available"); return }
+
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = on ? .on : .off
+            // Optional thing you may want when the torch it's on, is to manipulate the level of the torch
+            if on { try device.setTorchModeOn(level: AVCaptureDevice.maxAvailableTorchLevel.significand) }
+            device.unlockForConfiguration()
+        } catch {
+            print("Torch can't be used")
+        }
     }
 }
 

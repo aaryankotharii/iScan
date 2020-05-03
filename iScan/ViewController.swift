@@ -13,16 +13,20 @@ class ViewController: UIViewController {
     
     let session: AVCaptureSession = AVCaptureSession()
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
-
+    var success : Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         sessionSetup()
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         outputCheck()
+        runSession()
         addBlur()
+        print("Appear")
     }
     
     func sessionSetup(){
@@ -32,7 +36,7 @@ class ViewController: UIViewController {
         
         do {   try session.addInput(AVCaptureDeviceInput(device: device))   }
         catch {  print(error.localizedDescription)  }
- 
+        
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.layer.bounds
         view.layer.addSublayer(previewLayer)
@@ -40,16 +44,16 @@ class ViewController: UIViewController {
         session.startRunning()
     }
     
-    func outputCheck() {
+    func outputCheck(){
         
         //MARK: Check output
         if session.canAddOutput(metadataOutput) {
-                session.addOutput(metadataOutput)
-               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-               metadataOutput.metadataObjectTypes = [.qr]
-           } else {
-              print("failed")
-           }
+            session.addOutput(metadataOutput)
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [.qr]
+        } else {
+            print("failed")
+        }
     }
     
     func addBlur(){
@@ -89,6 +93,12 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    private func runSession(){
+        if !session.isRunning{
+            session.startRunning()
+        }
+    }
+    
 }
 
 //MARK:- AVCaptureMetadataOutputObjects Delegate Method
@@ -113,7 +123,7 @@ extension ViewController {
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)  { (UIAlertAction) in
             self.session.startRunning()
-               }
+        }
         ALert.addAction(cancelAction)
         ALert.addAction(goAction)
         self.present(ALert,animated: true)

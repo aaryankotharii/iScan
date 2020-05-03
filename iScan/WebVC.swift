@@ -11,12 +11,15 @@ import WebKit
 
 
 class WebVC: UIViewController {
-
-    @IBOutlet var webView: WKWebView!
+    
+    var webView: WKWebView!
+    
+    var url = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        showWebsite()
         // Do any additional setup after loading the view.
     }
     
@@ -34,5 +37,17 @@ class WebVC: UIViewController {
 }
 
 extension WebVC: WKNavigationDelegate {
-    
+    func showWebsite(){
+        webView = WKWebView()
+            
+        webView.navigationDelegate = self
+            
+        view = webView
+                   
+        let url = URL(string: self.url)!
+            
+        webView.load(URLRequest(url: url))
+            
+        webView.allowsBackForwardNavigationGestures = true
+    }
 }

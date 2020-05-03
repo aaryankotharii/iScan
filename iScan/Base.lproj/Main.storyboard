@@ -29,14 +29,33 @@
         <!--WebVC-->
         <scene sceneID="V8b-et-sO9">
             <objects>
-                <viewController id="1BL-Ju-9pT" customClass="WebVC" customModule="iScan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebVC" id="1BL-Ju-9pT" customClass="WebVC" customModule="iScan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mhC-CK-i4z">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FV9-V0-mVy">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="FV9-V0-mVy" firstAttribute="leading" secondItem="Vpi-nq-Vac" secondAttribute="leading" id="72l-SG-O95"/>
+                            <constraint firstItem="Vpi-nq-Vac" firstAttribute="bottom" secondItem="FV9-V0-mVy" secondAttribute="bottom" id="UAr-v7-iLE"/>
+                            <constraint firstItem="FV9-V0-mVy" firstAttribute="top" secondItem="Vpi-nq-Vac" secondAttribute="top" id="fUr-vK-aK1"/>
+                            <constraint firstItem="Vpi-nq-Vac" firstAttribute="trailing" secondItem="FV9-V0-mVy" secondAttribute="trailing" id="mk9-lX-YaU"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Vpi-nq-Vac"/>
                     </view>
                     <navigationItem key="navigationItem" id="1oA-6E-BCM"/>
+                    <connections>
+                        <outlet property="webView" destination="FV9-V0-mVy" id="dTV-at-f3z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sQa-PA-pcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

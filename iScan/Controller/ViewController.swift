@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         runSession()
         self.label.text = "Find a code to scan"
         self.navigationController?.navigationBar.isHidden = true
+        toggleTorch(on: true)
     }
     
     //MARK: Setup camera session

@@ -30,5 +30,14 @@ class ViewController: UIViewController {
         previewLayer.frame = self.view.layer.bounds
         self.view.layer.addSublayer(previewLayer)
     }
+    
+    func addBlur(){
+        let blur = UIBlurEffect(style: .regular)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = self.view.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.view.addSubview(blurView)
+    }
+    
 }
 

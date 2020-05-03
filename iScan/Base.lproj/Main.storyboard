@@ -26,7 +26,7 @@
             </objects>
             <point key="canvasLocation" x="852.17391304347836" y="87.723214285714278"/>
         </scene>
-        <!--WebVC-->
+        <!--iScan-->
         <scene sceneID="V8b-et-sO9">
             <objects>
                 <viewController storyboardIdentifier="WebVC" id="1BL-Ju-9pT" customClass="WebVC" customModule="iScan" customModuleProvider="target" sceneMemberID="viewController">
@@ -34,29 +34,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FV9-V0-mVy">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Error" translatesAutoresizingMaskIntoConstraints="NO" id="l2Z-Z6-CeH">
+                                <rect key="frame" x="87" y="339" width="240" height="218"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="7tt-mP-ifC"/>
+                                    <constraint firstAttribute="height" constant="218" id="Lyl-4s-5fJ"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" red="0.55119748905340249" green="0.67471402519893897" blue="0.6664621070446004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="FV9-V0-mVy" firstAttribute="leading" secondItem="Vpi-nq-Vac" secondAttribute="leading" id="72l-SG-O95"/>
-                            <constraint firstItem="Vpi-nq-Vac" firstAttribute="bottom" secondItem="FV9-V0-mVy" secondAttribute="bottom" id="UAr-v7-iLE"/>
-                            <constraint firstItem="FV9-V0-mVy" firstAttribute="top" secondItem="Vpi-nq-Vac" secondAttribute="top" id="fUr-vK-aK1"/>
-                            <constraint firstItem="Vpi-nq-Vac" firstAttribute="trailing" secondItem="FV9-V0-mVy" secondAttribute="trailing" id="mk9-lX-YaU"/>
+                            <constraint firstItem="l2Z-Z6-CeH" firstAttribute="centerY" secondItem="mhC-CK-i4z" secondAttribute="centerY" id="23a-Pl-mXN"/>
+                            <constraint firstItem="l2Z-Z6-CeH" firstAttribute="centerX" secondItem="mhC-CK-i4z" secondAttribute="centerX" id="e94-5S-SI9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vpi-nq-Vac"/>
                     </view>
-                    <navigationItem key="navigationItem" id="1oA-6E-BCM"/>
+                    <navigationItem key="navigationItem" title="iScan" id="1oA-6E-BCM"/>
+                    <connections>
+                        <outlet property="errorImage" destination="l2Z-Z6-CeH" id="9X2-ge-qzl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sQa-PA-pcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1593" y="88"/>
+            <point key="canvasLocation" x="1592.753623188406" y="87.723214285714278"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4bM-kS-Vss">
@@ -77,4 +77,7 @@
             <point key="canvasLocation" x="-57.971014492753625" y="87.723214285714278"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Error" width="272" height="238"/>
+    </resources>
 </document>

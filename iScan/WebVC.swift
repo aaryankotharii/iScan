@@ -12,6 +12,8 @@ import WebKit
 
 class WebVC: UIViewController {
     
+    @IBOutlet var errorImage: UIImageView!
+    
     var webView: WKWebView!
     
     var url = ""
@@ -19,19 +21,34 @@ class WebVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = false
+        errorImage.isHidden = true
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let url = URL(string: self.url)
-        showWebsite(url!)
+        if urlChecker(self.url){
+        let url = URL(string: self.url)!
+        showWebsite(url)
+        }
+        else{
+            errorImage.isHidden = false
+            print("INVALID")
+        }
 
     }
-
+    
+  func urlChecker (_ urlString: String) -> Bool {
+            if let url = NSURL(string: urlString) {
+                return UIApplication.shared.canOpenURL(url as URL)
+            }
+        return false
+    }
 }
 
 extension WebVC: WKNavigationDelegate {
     func showWebsite(_ url : URL){
+        print("FUNC called")
         webView = WKWebView()
             
         webView.navigationDelegate = self

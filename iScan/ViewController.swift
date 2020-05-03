@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sessionSetup()
-        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -26,7 +25,7 @@ class ViewController: UIViewController {
         outputCheck()
         runSession()
         addBlur()
-        print("Appear")
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     func sessionSetup(){

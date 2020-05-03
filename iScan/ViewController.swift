@@ -17,15 +17,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sessionSetup()
-        addBlur()
-        print(getMaskSize())
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         outputCheck()
-
+        addBlur()
     }
     
     func sessionSetup(){
@@ -35,7 +32,6 @@ class ViewController: UIViewController {
         
         do {   try session.addInput(AVCaptureDeviceInput(device: device))   }
         catch {  print(error.localizedDescription)  }
-        
  
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.layer.bounds
@@ -96,7 +92,7 @@ extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let url = readableObject.stringValue else { return }
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-            print(url)
+            SuccessAlert(url)
         }
         session.stopRunning()
     }

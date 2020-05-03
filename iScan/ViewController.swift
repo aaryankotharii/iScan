@@ -16,8 +16,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        outputCheck()
         sessionSetup()
         addBlur()
+        
         // Do any additional setup after loading the view.
     }
     
@@ -37,7 +39,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         session.startRunning()
     }
     
-    func outputCheck() -> Bool {
+    func outputCheck() {
         
         //MARK: Check output
         if session.canAddOutput(metadataOutput) {
@@ -46,9 +48,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                metadataOutput.metadataObjectTypes = [.qr]
            } else {
               print("failed")
-              return false
            }
-        return true
     }
     
     func addBlur(){
@@ -56,7 +56,21 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = self.view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.view.addSubview(blurView)
+        
+        
+        let scanLayer = CAShapeLayer()
+        
+        let outerPath = UIBezierPath(rect: scanRect)
+        
+        let superlayerPath = UIBezierPath.init(rect: blurView.frame)
+        outerPath.usesEvenOddFillRule = true
+        outerPath.append(superlayerPath)
+        scanLayer.path = outerPath.cgPath
+        scanLayer.fillRule = .evenOdd
+        scanLayer.fillColor = UIColor.black.cgColor
+        
+        view.addSubview(blurView)
+        blurView.layer.mask = scanLayer
     }
     
 }

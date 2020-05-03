@@ -53,7 +53,6 @@ class ViewController: UIViewController {
                metadataOutput.metadataObjectTypes = [.qr]
            } else {
               print("failed")
-            z
            }
     }
     
@@ -103,4 +102,18 @@ extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
     }
 }
 
+extension ViewController {
+    public func SuccessAlert(_ message : String){
+        let ALert = UIAlertController(title: "Heres Your Link", message: message, preferredStyle: .alert)
+        let goAction = UIAlertAction(title: "Go to page", style: .default) { (UIAlertAction) in
+            print(message)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)  { (UIAlertAction) in
+            self.session.startRunning()
+               }
+        ALert.addAction(cancelAction)
+        ALert.addAction(goAction)
+        self.present(ALert,animated: true)
+    }
+}
 

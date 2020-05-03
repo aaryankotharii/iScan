@@ -53,6 +53,7 @@ class ViewController: UIViewController {
                metadataOutput.metadataObjectTypes = [.qr]
            } else {
               print("failed")
+            z
            }
     }
     

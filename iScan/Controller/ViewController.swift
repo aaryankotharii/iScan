@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         sessionSetup()
         addBlur()
         addLabel()
+        addCorners()
     }
     
     //MARK: Methods for when view appears
@@ -62,7 +63,7 @@ class ViewController: UIViewController {
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             metadataOutput.metadataObjectTypes = [.qr]
         } else {
-            errorAlert("Cannot display camera output")
+            //errorAlert("Cannot display camera output")
         }
     }
     
@@ -125,6 +126,20 @@ class ViewController: UIViewController {
         label.clipsToBounds = true
         label.layer.cornerRadius = (46/896)*view.frame.height
         view.addSubview(label)
+    }
+    
+    func addCorners(){
+        let maskSize = getMaskSize().height
+        let imageWidth = maskSize * 1.0866666667
+        let halfWidth = (imageWidth) / 2
+        let x = view.center.x - halfWidth
+        let y = view.center.y - halfWidth
+        let imageFrame = CGRect(x: x, y: y, width: imageWidth, height: imageWidth)
+        let image = UIImageView()
+        image.frame = imageFrame
+        image.image = UIImage(named: "corners")
+        print(imageFrame)
+        view.addSubview(image)
     }
 }
 

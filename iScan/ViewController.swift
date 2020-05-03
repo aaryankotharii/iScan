@@ -15,6 +15,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        sessionSetup()
+        addBlur()
         // Do any additional setup after loading the view.
     }
     

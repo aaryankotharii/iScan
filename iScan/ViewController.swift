@@ -11,38 +11,49 @@ import AVKit
 
 class ViewController: UIViewController {
     
+    //MARK: Variables
     let session: AVCaptureSession = AVCaptureSession()
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
     var success : Bool = true
+    var label : UILabel!
+
     
+    //MARK:- VC lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true /// Hide Nav bar
+        //MARK: Add respective components
         sessionSetup()
+        addBlur()
+        addLabel()
     }
     
+    //MARK: Methods for when view appears
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         outputCheck()
         runSession()
-        addBlur()
+        self.label.text = "Find a code to scan"
         self.navigationController?.navigationBar.isHidden = true
     }
     
+    //MARK: Setup camera session
     func sessionSetup(){
-        guard let device = AVCaptureDevice.default(for: .video ) else  { print("input fail"); return }
+        guard let device = AVCaptureDevice.default(for: .video ) else  { errorAlert("camera missing") ; return } /// Check camera
         
         session.sessionPreset = AVCaptureSession.Preset.high
         
         do {   try session.addInput(AVCaptureDeviceInput(device: device))   }
-        catch {  print(error.localizedDescription)  }
+        catch {  errorAlert(error.localizedDescription) }
         
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.layer.bounds
         view.layer.addSublayer(previewLayer)
         
-        session.startRunning()
+        session.startRunning() /// Start session
     }
     
+    //MARK: Check for if camera video can be displayed
     func outputCheck(){
         
         //MARK: Check output
@@ -51,10 +62,11 @@ class ViewController: UIViewController {
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             metadataOutput.metadataObjectTypes = [.qr]
         } else {
-            print("failed")
+            errorAlert("Cannot display camera output")
         }
     }
     
+    //MARK:- Add Blur with custom mask
     func addBlur(){
         //MARK: Add Blur view
         let blur = UIBlurEffect(style: .regular)
@@ -72,10 +84,11 @@ class ViewController: UIViewController {
         scanLayer.path = outerPath.cgPath
         scanLayer.fillRule = .evenOdd
         
-        view.addSubview(blurView)
+        view.addSubview(blurView) /// FInal blur layer
         blurView.layer.mask = scanLayer
     }
     
+    // Get mask size respect to screen size
     private func getMaskSize() -> CGRect {
         let viewWidth = view.frame.width
         let rectwidth = viewWidth - 114
@@ -85,6 +98,7 @@ class ViewController: UIViewController {
         return CGRect(x: x, y: y, width: rectwidth, height: rectwidth)
     }
     
+    //MARK: Instantiate VC
     func goToWebsite(_ url : String){
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyBoard.instantiateViewController(identifier: "WebVC") as! WebVC
@@ -92,12 +106,26 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    //Return to session
     private func runSession(){
         if !session.isRunning{
             session.startRunning()
         }
     }
     
+    //MARK: Add disclaimer label
+    func addLabel(){
+        let lableDimension = (92/896)*view.frame.height
+        label = UILabel(frame: CGRect(x: 0, y: 0, width: lableDimension+100, height: lableDimension))
+        label.center = CGPoint(x: view.center.x, y: 100)
+        label.textAlignment = .center
+        label.text = "Find a code to scan"
+        label.font = label.font.withSize(20)
+        label.textColor = .white
+        label.clipsToBounds = true
+        label.layer.cornerRadius = (46/896)*view.frame.height
+        view.addSubview(label)
+    }
 }
 
 //MARK:- AVCaptureMetadataOutputObjects Delegate Method
@@ -109,23 +137,33 @@ extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
             guard let url = readableObject.stringValue else { return }
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             SuccessAlert(url)
+            self.label.text = "✅"
         }
         session.stopRunning()
     }
 }
 
+//MARK:- Alert Functions
 extension ViewController {
     public func SuccessAlert(_ message : String){
-        let ALert = UIAlertController(title: "Heres Your Link", message: message, preferredStyle: .alert)
+        let ALert = UIAlertController(title: "Heres Your result 😉", message: message, preferredStyle: .alert)
         let goAction = UIAlertAction(title: "Go to page", style: .default) { (UIAlertAction) in
             self.goToWebsite(message)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)  { (UIAlertAction) in
             self.session.startRunning()
+            self.label.text = "Find a code to scan"
         }
         ALert.addAction(cancelAction)
         ALert.addAction(goAction)
         self.present(ALert,animated: true)
+    }
+    
+    public func errorAlert(_ message: String){
+        let aLert = UIAlertController(title: "Uh oh! 😕", message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "return", style: .default, handler: nil)
+        aLert.addAction(action)
+        self.present(aLert,animated: true)
     }
 }
 

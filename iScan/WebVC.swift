@@ -19,33 +19,25 @@ class WebVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showWebsite()
         // Do any additional setup after loading the view.
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let url = URL(string: self.url)
+        showWebsite(url!)
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
-    */
 
 }
 
 extension WebVC: WKNavigationDelegate {
-    func showWebsite(){
+    func showWebsite(_ url : URL){
         webView = WKWebView()
             
         webView.navigationDelegate = self
             
         view = webView
-                   
-        let url = URL(string: self.url)!
-            
+                               
         webView.load(URLRequest(url: url))
             
         webView.allowsBackForwardNavigationGestures = true

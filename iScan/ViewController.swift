@@ -82,6 +82,13 @@ class ViewController: UIViewController {
         return CGRect(x: x, y: y, width: rectwidth, height: rectwidth)
     }
     
+    func goToWebsite(_ url : String){
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(identifier: "WebVC") as! WebVC
+        vc.url = url
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 
 //MARK:- AVCaptureMetadataOutputObjects Delegate Method
@@ -102,7 +109,7 @@ extension ViewController {
     public func SuccessAlert(_ message : String){
         let ALert = UIAlertController(title: "Heres Your Link", message: message, preferredStyle: .alert)
         let goAction = UIAlertAction(title: "Go to page", style: .default) { (UIAlertAction) in
-            print(message)
+            self.goToWebsite(message)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)  { (UIAlertAction) in
             self.session.startRunning()

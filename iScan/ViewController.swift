@@ -16,11 +16,16 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        outputCheck()
         sessionSetup()
         addBlur()
         print(getMaskSize())
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        outputCheck()
+
     }
     
     func sessionSetup(){
@@ -42,13 +47,13 @@ class ViewController: UIViewController {
     func outputCheck() {
         
         //MARK: Check output
-//        if session.canAddOutput(metadataOutput) {
-//               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-//               session.addOutput(metadataOutput)
-//               metadataOutput.metadataObjectTypes = [.qr]
-//           } else {
-//              print("failed")
-//           }
+        if session.canAddOutput(metadataOutput) {
+                session.addOutput(metadataOutput)
+               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+               metadataOutput.metadataObjectTypes = [.qr]
+           } else {
+              print("failed")
+           }
     }
     
     func addBlur(){
@@ -83,9 +88,18 @@ class ViewController: UIViewController {
     
 }
 
-//MARK:- AVCaptureMetadataOutputObjects Delegate Methods
+//MARK:- AVCaptureMetadataOutputObjects Delegate Method
 extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
-
+    
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        if let metadataObject = metadataObjects.first {
+            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
+            guard let url = readableObject.stringValue else { return }
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            print(url)
+        }
+        session.stopRunning()
+    }
 }
 
 

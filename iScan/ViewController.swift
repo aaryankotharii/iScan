@@ -57,10 +57,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         blurView.frame = self.view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        
         let scanLayer = CAShapeLayer()
         
-        let outerPath = UIBezierPath(rect: scanRect)
+        let outerPath = UIBezierPath(roundedRect: CGRect(x: 57, y: 298, width: 300, height: 300),
+                                     cornerRadius: 30)
         
         let superlayerPath = UIBezierPath.init(rect: blurView.frame)
         outerPath.usesEvenOddFillRule = true
@@ -68,6 +68,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         scanLayer.path = outerPath.cgPath
         scanLayer.fillRule = .evenOdd
         scanLayer.fillColor = UIColor.black.cgColor
+        
         
         view.addSubview(blurView)
         blurView.layer.mask = scanLayer

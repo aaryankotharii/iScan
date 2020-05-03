@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
@@ -161,14 +162,16 @@ class ViewController: UIViewController {
 
         do {
             try device.lockForConfiguration()
+                                    
             device.torchMode = on ? .on : .off
             // Optional thing you may want when the torch it's on, is to manipulate the level of the torch
-            if on { try device.setTorchModeOn(level: AVCaptureDevice.maxAvailableTorchLevel.significand) }
+            if on { try device.setTorchModeOn(level: 0.5) }
             device.unlockForConfiguration()
         } catch {
             print("Torch can't be used")
         }
     }
+        
 }
 
 //MARK:- AVCaptureMetadataOutputObjects Delegate Method

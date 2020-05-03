@@ -31,6 +31,8 @@ class ViewController: UIViewController {
     var label : UILabel!
     var image: UIImageView!
     var torchisOn : Bool = false
+    var blurView : UIVisualEffectView!
+    var previewLayer : AVCaptureVideoPreviewLayer!
 
     
     //MARK:- VC lifecycle methods
@@ -39,7 +41,7 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true /// Hide Nav bar
         //MARK: Add respective components
         sessionSetup()
-        addBlur()
+       // addBlur()
         addLabel()
         addCorners()
         view.addSubview(torchButton)
@@ -52,6 +54,17 @@ class ViewController: UIViewController {
         runSession()
         self.label.text = "Find a code to scan"
         self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidLayoutSubviews() {
+      super.viewDidLayoutSubviews()
+      if let connection =  previewLayer.connection  {
+        if connection.isVideoOrientationSupported {
+            let videoOrientation = AVCaptureVideoOrientation(deviceOrientation: UIDevice.current.orientation)
+            connection.videoOrientation = videoOrientation!
+          previewLayer.frame = self.view.bounds
+        }
+      }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -68,8 +81,10 @@ class ViewController: UIViewController {
              potraitConsatrint.priority = UILayoutPriority(rawValue: 1000)
              potraitConstraint2.priority = UILayoutPriority(rawValue: 1000)
         }
-        sessionSetup()
+       // blurView.removeFromSuperview()
+      //  addBlur()
     }
+
     
     //MARK: Setup camera session
     func sessionSetup(){
@@ -80,7 +95,7 @@ class ViewController: UIViewController {
         do {   try session.addInput(AVCaptureDeviceInput(device: device))   }
         catch {  errorAlert(error.localizedDescription) }
         
-        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.layer.bounds
         view.layer.addSublayer(previewLayer)
         
@@ -104,7 +119,7 @@ class ViewController: UIViewController {
     func addBlur(){
         //MARK: Add Blur view
         let blur = UIBlurEffect(style: .regular)
-        let blurView = UIVisualEffectView(effect: blur)
+        blurView = UIVisualEffectView(effect: blur)
         blurView.frame = self.view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
@@ -224,6 +239,8 @@ extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
             self.label.text = "✅"
         }
         session.stopRunning()
+        torchisOn = false
+        toggleTorch(on: torchisOn)
     }
 }
 
@@ -251,3 +268,26 @@ extension ViewController {
     }
 }
 
+extension AVCaptureVideoOrientation {
+    
+    /// Maps UIDeviceOrientation to AVCaptureVideoOrientation
+    init?(deviceOrientation: UIDeviceOrientation) {
+        switch deviceOrientation {
+        case .portrait:
+            self.init(rawValue: AVCaptureVideoOrientation.portrait.rawValue)
+        case .portraitUpsideDown:
+            self.init(rawValue: AVCaptureVideoOrientation.portraitUpsideDown.rawValue)
+        case .landscapeLeft:
+            self.init(rawValue: AVCaptureVideoOrientation.landscapeRight.rawValue)
+        case .landscapeRight:
+            self.init(rawValue: AVCaptureVideoOrientation.landscapeLeft.rawValue)
+        case .faceUp:
+            self.init(rawValue: AVCaptureVideoOrientation.portrait.rawValue)
+        case .faceDown:
+            self.init(rawValue: AVCaptureVideoOrientation.portraitUpsideDown.rawValue)
+        default:
+            self.init(rawValue: AVCaptureVideoOrientation.portrait.rawValue)
+        }
+    }
+    
+}

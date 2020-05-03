@@ -9,9 +9,10 @@
 import UIKit
 import AVKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     let session: AVCaptureSession = AVCaptureSession()
+    let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,16 +22,33 @@ class ViewController: UIViewController {
     }
     
     func sessionSetup(){
-        guard let device = AVCaptureDevice.default(for: .video ) else  { return }
+        guard let device = AVCaptureDevice.default(for: .video ) else  { print("input fail"); return }
         
         session.sessionPreset = AVCaptureSession.Preset.high
         
         do {   try session.addInput(AVCaptureDeviceInput(device: device))   }
         catch {  print(error.localizedDescription)  }
         
+ 
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.layer.bounds
-        self.view.layer.addSublayer(previewLayer)
+        view.layer.addSublayer(previewLayer)
+        
+        session.startRunning()
+    }
+    
+    func outputCheck() -> Bool {
+        
+        //MARK: Check output
+        if session.canAddOutput(metadataOutput) {
+               metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+               session.addOutput(metadataOutput)
+               metadataOutput.metadataObjectTypes = [.qr]
+           } else {
+              print("failed")
+              return false
+           }
+        return true
     }
     
     func addBlur(){

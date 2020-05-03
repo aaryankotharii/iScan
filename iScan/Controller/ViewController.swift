@@ -12,12 +12,25 @@ import AVFoundation
 
 class ViewController: UIViewController {
     
+    @IBOutlet var torchButton: UIButton!
+    
+    @IBOutlet var potraitConsatrint: NSLayoutConstraint!
+    
+    @IBOutlet var landscapeConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var potraitConstraint2: NSLayoutConstraint!
+    
+    @IBOutlet var landscapeConstraint2: NSLayoutConstraint!
+    
+    
+    
     //MARK: Variables
     let session: AVCaptureSession = AVCaptureSession()
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
     var success : Bool = true
     var label : UILabel!
     var image: UIImageView!
+    var torchisOn : Bool = false
 
     
     //MARK:- VC lifecycle methods
@@ -29,6 +42,7 @@ class ViewController: UIViewController {
         addBlur()
         addLabel()
         addCorners()
+        view.addSubview(torchButton)
     }
     
     //MARK: Methods for when view appears
@@ -38,7 +52,23 @@ class ViewController: UIViewController {
         runSession()
         self.label.text = "Find a code to scan"
         self.navigationController?.navigationBar.isHidden = true
-        toggleTorch(on: true)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.orientation.isLandscape {
+            print("Landscape")
+            landscapeConstraint.priority = UILayoutPriority(rawValue: 1000)
+            landscapeConstraint2.priority = UILayoutPriority(rawValue: 1000)
+            potraitConsatrint.priority = UILayoutPriority(rawValue: 1)
+            potraitConstraint2.priority = UILayoutPriority(rawValue: 1)
+        } else {
+             landscapeConstraint.priority = UILayoutPriority(rawValue: 1)
+             landscapeConstraint2.priority = UILayoutPriority(rawValue: 1)
+             potraitConsatrint.priority = UILayoutPriority(rawValue: 1000)
+             potraitConstraint2.priority = UILayoutPriority(rawValue: 1000)
+        }
+        sessionSetup()
     }
     
     //MARK: Setup camera session
@@ -171,6 +201,14 @@ class ViewController: UIViewController {
             print("Torch can't be used")
         }
     }
+    
+    @IBAction func toggleTorch(_ sender: UIButton) {
+        torchisOn.toggle()
+        let image = torchisOn ?  #imageLiteral(resourceName: "torch_on") : #imageLiteral(resourceName: "torch_off")
+        torchButton.setImage(image, for: .normal)
+        toggleTorch(on: torchisOn)
+    }
+    
         
 }
 

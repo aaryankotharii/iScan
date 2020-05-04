@@ -22,6 +22,16 @@ class ViewController: UIViewController {
     
     @IBOutlet var landscapeConstraint2: NSLayoutConstraint!
     
+    @IBOutlet var blurLeft: NSLayoutConstraint!
+    
+    @IBOutlet var blurRight: NSLayoutConstraint!
+    
+    @IBOutlet var blurBottom: NSLayoutConstraint!
+    
+    @IBOutlet var blurTop: NSLayoutConstraint!
+    
+    
+    @IBOutlet var blur: UIVisualEffectView!
     
     
     //MARK: Variables
@@ -41,7 +51,7 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true /// Hide Nav bar
         //MARK: Add respective components
         sessionSetup()
-       // addBlur()
+        addBlur()
         addLabel()
         addCorners()
         view.addSubview(torchButton)
@@ -65,6 +75,15 @@ class ViewController: UIViewController {
           previewLayer.frame = self.view.bounds
         }
       }
+        
+     
+//        NSLayoutConstraint.activate([
+//               self.blur.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 0),
+//               self.blur.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 0),
+//                self.blur.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: 0),
+//               self.blur.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 0)
+//
+//        ])
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -75,14 +94,24 @@ class ViewController: UIViewController {
             landscapeConstraint2.priority = UILayoutPriority(rawValue: 1000)
             potraitConsatrint.priority = UILayoutPriority(rawValue: 1)
             potraitConstraint2.priority = UILayoutPriority(rawValue: 1)
+            
+            let height = self.view.frame.height
+            let width = self.view.frame.width
+            self.blur.widthAnchor.constraint(equalToConstant: width).isActive = true
+            self.blur.heightAnchor.constraint(equalToConstant: height).isActive = true
+
         } else {
              landscapeConstraint.priority = UILayoutPriority(rawValue: 1)
              landscapeConstraint2.priority = UILayoutPriority(rawValue: 1)
              potraitConsatrint.priority = UILayoutPriority(rawValue: 1000)
              potraitConstraint2.priority = UILayoutPriority(rawValue: 1000)
+            
+            let width = self.view.frame.width
+            let height = self.view.frame.height
+            self.blur.widthAnchor.constraint(equalToConstant: width).isActive = true
+            self.blur.heightAnchor.constraint(equalToConstant: height).isActive = true
         }
-       // blurView.removeFromSuperview()
-      //  addBlur()
+        
     }
 
     
@@ -118,23 +147,27 @@ class ViewController: UIViewController {
     //MARK:- Add Blur with custom mask
     func addBlur(){
         //MARK: Add Blur view
-        let blur = UIBlurEffect(style: .regular)
-        blurView = UIVisualEffectView(effect: blur)
-        blurView.frame = self.view.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+       // let blur = UIBlurEffect(style: .regular)
+        //blurView = UIVisualEffectView(effect: blur)
+       // blurView.frame = self.view.bounds
+       // blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         let scanLayer = CAShapeLayer()
         let maskSize = getMaskSize()
         let outerPath = UIBezierPath(roundedRect: maskSize, cornerRadius: 30)
         
         //MARK: Add Mask
-        let superlayerPath = UIBezierPath(rect: blurView.frame)
+        let superlayerPath = UIBezierPath(rect: self.blur.frame)
         outerPath.append(superlayerPath)
         scanLayer.path = outerPath.cgPath
         scanLayer.fillRule = .evenOdd
         
-        view.addSubview(blurView) /// FInal blur layer
-        blurView.layer.mask = scanLayer
+        view.addSubview(self.blur) /// FInal blur layer
+        self.blur.layer.mask = scanLayer
+        print(self.blur.constraints)
+        
+        self.blur.translatesAutoresizingMaskIntoConstraints = false
+
     }
     
     // Get mask size respect to screen size

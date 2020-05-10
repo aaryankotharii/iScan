@@ -17,26 +17,42 @@ class ViewController: UIViewController {
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
     var success : Bool = true
     var label : UILabel!
-
+    var image : UIImageView!
     
     //MARK:- VC lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true /// Hide Nav bar
-        //MARK: Add respective components
-        sessionSetup()
-        addBlur()
-        addLabel()
+        initialSetup()
     }
     
     //MARK: Methods for when view appears
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        viewDidAppearSetup()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        image.layer.removeAllAnimations()
+    }
+    
+    fileprivate func initialSetup(){
+        self.navigationController?.navigationBar.isHidden = true /// Hide Nav bar
+        //MARK: Add respective components
+        sessionSetup()
+        addBlur()
+        addLabel()
+        addCorners()
+    }
+    
+    fileprivate func viewDidAppearSetup(){
         outputCheck()
         runSession()
+        animateCorner()
         self.label.text = "Find a code to scan"
         self.navigationController?.navigationBar.isHidden = true
     }
+    
     
     //MARK: Setup camera session
     func sessionSetup(){
@@ -67,6 +83,27 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    //Return to session
+    private func runSession(){
+        if !session.isRunning{
+            session.startRunning()
+        }
+    }
+    // --------------------------------------------------------------------------------
+    //MARK: NAVIGATION
+    func goToWebsite(_ url : String){
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(identifier: "WebVC") as! WebVC
+        vc.url = url
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    // ---------------------------------------------------------------------------------
+    
+    
+    // ---------------------------------BEGIN-UI-SETUP----------------------------------------
+    // MARK: - UserInterface elements setup
+    
     //MARK:- Add Blur with custom mask
     func addBlur(){
         //MARK: Add Blur view
@@ -90,6 +127,7 @@ class ViewController: UIViewController {
     }
     
     // Get mask size respect to screen size
+    /// For `Dynamic` CameraView Size
     private func getMaskSize() -> CGRect {
         let viewWidth = view.frame.width
         let rectwidth = viewWidth - 114
@@ -97,21 +135,6 @@ class ViewController: UIViewController {
         let x = view.center.x - halfWidth
         let y = view.center.y - halfWidth
         return CGRect(x: x, y: y, width: rectwidth, height: rectwidth)
-    }
-    
-    //MARK: Instantiate VC
-    func goToWebsite(_ url : String){
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(identifier: "WebVC") as! WebVC
-        vc.url = url
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    //Return to session
-    private func runSession(){
-        if !session.isRunning{
-            session.startRunning()
-        }
     }
     
     //MARK: Add disclaimer label
@@ -127,11 +150,40 @@ class ViewController: UIViewController {
         label.layer.cornerRadius = (46/896)*view.frame.height
         view.addSubview(label)
     }
+    
+    //MARK: Add White corners ( design purpose only )
+    func addCorners(){
+        let maskSize = getMaskSize().height
+        let imageWidth = maskSize * 1.0866666667
+        let halfWidth = (imageWidth) / 2
+        let x = view.center.x - halfWidth
+        let y = view.center.y - halfWidth
+        let imageFrame = CGRect(x: x, y: y, width: imageWidth, height: imageWidth)
+        
+        image  = UIImageView()
+        image.frame = imageFrame
+        image.image = UIImage(named: "corners")
+        print(imageFrame)
+        view.addSubview(image)
+    }
+    
+    // Add animation to the corners
+    func animateCorner(){
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.toValue = 1.1         /// 1.1 times initial size
+        animation.duration=1            /// 1 second
+        animation.timingFunction=CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
+        animation.autoreverses=true
+        animation.repeatCount = .infinity           /// Infinite animation
+        image.layer.add(animation, forKey:"animate")
+    }
+    // -----------------------------------END-UI-SETUP----------------------------------------
 }
 
 //MARK:- AVCaptureMetadataOutputObjects Delegate Method
 extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
     
+    /// returns metadataOutput as `String from qr`
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         if let metadataObject = metadataObjects.first {
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
@@ -146,6 +198,8 @@ extension ViewController : AVCaptureMetadataOutputObjectsDelegate{
 
 //MARK:- Alert Functions
 extension ViewController {
+    
+    /// Alert shown when qr scan is `Successful`
     public func SuccessAlert(_ message : String){
         let ALert = UIAlertController(title: "Heres Your result 😉", message: message, preferredStyle: .alert)
         let goAction = UIAlertAction(title: "Go to page", style: .default) { (UIAlertAction) in
@@ -160,6 +214,7 @@ extension ViewController {
         self.present(ALert,animated: true)
     }
     
+    /// Alert shown when qr scan  `Fails` or `Unexpected Error`
     public func errorAlert(_ message: String){
         let aLert = UIAlertController(title: "Uh oh! 😕", message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "return", style: .default, handler: nil)

@@ -14,81 +14,17 @@
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="swB-qq-sqT">
-                                <rect key="frame" x="186" y="437" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <viewLayoutGuide key="safeArea" id="I0j-NO-YG7"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="0TA-Oc-4zo">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </view>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="waG-Zd-mFs">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pYX-JH-7Wa">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yQi-FJ-YcV">
-                                            <rect key="frame" x="186" y="40" width="42" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <viewLayoutGuide key="safeArea" id="lqe-8I-WH4"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </view>
-                                <color key="backgroundColor" red="0.99607843139999996" green="0.14901960780000001" blue="0.1647058824" alpha="1" colorSpace="calibratedRGB"/>
-                                <blurEffect style="regular"/>
-                            </visualEffectView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apf-OQ-U6O">
-                                <rect key="frame" x="177" y="786" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="7YD-bH-bnU"/>
-                                    <constraint firstAttribute="width" constant="60" id="sHh-dw-Oae"/>
-                                </constraints>
-                                <state key="normal" image="torch_off"/>
-                                <connections>
-                                    <action selector="toggleTorch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wBl-Iz-tmP"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="apf-OQ-U6O" secondAttribute="bottom" constant="50" id="4ch-Vh-Pt1"/>
-                            <constraint firstItem="waG-Zd-mFs" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="AKS-85-tx4"/>
-                            <constraint firstAttribute="trailing" secondItem="apf-OQ-U6O" secondAttribute="trailing" priority="1" constant="50" id="IXT-mU-pzv"/>
-                            <constraint firstItem="waG-Zd-mFs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="YmR-03-Cxc"/>
-                            <constraint firstItem="apf-OQ-U6O" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Z9f-8G-ets"/>
-                            <constraint firstItem="waG-Zd-mFs" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="aHV-Yg-adh"/>
-                            <constraint firstItem="waG-Zd-mFs" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="hfO-am-8fd"/>
-                            <constraint firstItem="apf-OQ-U6O" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" priority="1" id="zlo-kx-rw7"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ccq-3U-CfI"/>
                     <connections>
-                        <outlet property="blur" destination="waG-Zd-mFs" id="hmh-Ke-ge7"/>
-                        <outlet property="blurBottom" destination="aHV-Yg-adh" id="cyX-Zo-0l7"/>
-                        <outlet property="blurLeft" destination="AKS-85-tx4" id="kxv-1O-wsV"/>
-                        <outlet property="blurRight" destination="YmR-03-Cxc" id="lOY-x4-QhY"/>
-                        <outlet property="blurTop" destination="hfO-am-8fd" id="bBT-Tg-5rV"/>
-                        <outlet property="landscapeConstraint" destination="zlo-kx-rw7" id="IpA-76-iOa"/>
-                        <outlet property="landscapeConstraint2" destination="IXT-mU-pzv" id="fz8-4f-yfy"/>
-                        <outlet property="potraitConsatrint" destination="Z9f-8G-ets" id="ik7-zi-1P0"/>
-                        <outlet property="potraitConstraint2" destination="4ch-Vh-Pt1" id="Iio-CX-lTf"/>
-                        <outlet property="torchButton" destination="apf-OQ-U6O" id="rc9-44-PWo"/>
                         <segue destination="1BL-Ju-9pT" kind="show" id="DFt-Mb-nUz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="852.17391304347836" y="87.723214285714278"/>
+            <point key="canvasLocation" x="851.78571428571422" y="86.956521739130437"/>
         </scene>
         <!--iScan-->
         <scene sceneID="V8b-et-sO9">
@@ -143,6 +79,5 @@
     </scenes>
     <resources>
         <image name="Error" width="272" height="238"/>
-        <image name="torch_off" width="61" height="61"/>
     </resources>
 </document>
